@@ -84,7 +84,9 @@ class NoteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->note->fill($request->all());
+        $this->note->save();
+        return response()->json(["mensaje"=>"Actualizada"]);
     }
 
     /**

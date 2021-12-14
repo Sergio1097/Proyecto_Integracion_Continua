@@ -57,11 +57,11 @@ class NoteController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
-        //
+        return response()->json($this->note);
     }
 
     /**

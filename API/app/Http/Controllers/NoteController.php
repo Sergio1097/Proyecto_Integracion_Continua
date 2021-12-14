@@ -1,28 +1,40 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace API\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
+use API\Http\Requests;
+use API\Http\Controllers\Controller;
+use Illuminate\Routing\Route;
+use API\Note;
 class NoteController extends Controller
 {
+    public function __construct(){
+        $this->middleware('cors');
+        $this->beforeFilter('@find', ['only' => ['show','update','destroy']]);
+    }
+
+    public function find(Route $route){
+        $this->note = Note::find($route->getParameter('notes'));
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        //
+        $notes = Note::all();
+
+        return response()->json($notes->toArray());
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -32,12 +44,13 @@ class NoteController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return Response
      */
     public function store(Request $request)
     {
-        //
+        Note::create($request->all());
+        return response()->json(["mensaje" => "creado correctamente"]);
     }
 
     /**
